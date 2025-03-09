@@ -1,0 +1,382 @@
+mysql> use hospitalmanagement;
+Database changed
+mysql> show tables;
++------------------------------+
+| Tables_in_hospitalmanagement |
++------------------------------+
+| ambulance_service            |
+| ambulances                   |
+| appointments                 |
+| attendance                   |
+| bill_details                 |
+| discharged_patients          |
+| doctor                       |
+| emergency_patients           |
+| inventory                    |
+| patients                     |
+| rooms                        |
+| staff                        |
+| user_logs                    |
+| users                        |
++------------------------------+
+14 rows in set (0.04 sec)
+
+mysql> USE hospitalmanagement;
+Database changed
+mysql> DESC ambulance_service;
++---------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+| Field         | Type                                            | Null | Key | Default           | Extra             |
++---------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+| id            | int                                             | NO   | PRI | NULL              | auto_increment    |
+| patient_name  | varchar(100)                                    | NO   |     | NULL              |                   |
+| address       | text                                            | NO   |     | NULL              |                   |
+| blood_type    | enum('A+','A-','B+','B-','O+','O-','AB+','AB-') | NO   |     | NULL              |                   |
+| ambulance_id  | int                                             | YES  | MUL | NULL              |                   |
+| dispatch_time | datetime                                        | YES  |     | NULL              |                   |
+| return_time   | datetime                                        | YES  |     | NULL              |                   |
+| created_at    | timestamp                                       | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++---------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+8 rows in set (0.02 sec)
+
+mysql> DESC ambulances;
++------------------+--------------------------------+------+-----+-------------------+-------------------+
+| Field            | Type                           | Null | Key | Default           | Extra             |
++------------------+--------------------------------+------+-----+-------------------+-------------------+
+| id               | int                            | NO   | PRI | NULL              | auto_increment    |
+| ambulance_number | varchar(50)                    | NO   | UNI | NULL              |                   |
+| status           | enum('Available','On Service') | YES  |     | Available         |                   |
+| created_at       | timestamp                      | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++------------------+--------------------------------+------+-----+-------------------+-------------------+
+4 rows in set (0.00 sec)
+
+mysql> DESC appointments;
++------------------+--------------+------+-----+-------------------+-------------------+
+| Field            | Type         | Null | Key | Default           | Extra             |
++------------------+--------------+------+-----+-------------------+-------------------+
+| id               | int          | NO   | PRI | NULL              | auto_increment    |
+| patient_name     | varchar(100) | NO   |     | NULL              |                   |
+| doctor_name      | varchar(100) | NO   |     | NULL              |                   |
+| appointment_date | date         | NO   |     | NULL              |                   |
+| appointment_time | time         | NO   |     | NULL              |                   |
+| created_at       | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++------------------+--------------+------+-----+-------------------+-------------------+
+6 rows in set (0.00 sec)
+
+mysql> DESC attendance;
++-----------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+| Field           | Type                                            | Null | Key | Default           | Extra             |
++-----------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+| id              | int                                             | NO   | PRI | NULL              | auto_increment    |
+| username        | varchar(50)                                     | NO   |     | NULL              |                   |
+| role            | enum('Admin','Doctor','Receptionist','Patient') | NO   |     | NULL              |                   |
+| attendance_date | date                                            | NO   |     | NULL              |                   |
+| created_at      | timestamp                                       | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++-----------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> DESC bill_details;
++------------------+---------------------------------------------+------+-----+---------+----------------+
+| Field            | Type                                        | Null | Key | Default | Extra          |
++------------------+---------------------------------------------+------+-----+---------+----------------+
+| bill_no          | int                                         | NO   | PRI | NULL    | auto_increment |
+| bill_date        | date                                        | NO   |     | NULL    |                |
+| patient_id       | int                                         | NO   | MUL | NULL    |                |
+| name             | varchar(100)                                | NO   |     | NULL    |                |
+| contact_no       | varchar(15)                                 | NO   |     | NULL    |                |
+| room_charges     | decimal(10,2)                               | NO   |     | NULL    |                |
+| pathology_fees   | decimal(10,2)                               | NO   |     | NULL    |                |
+| medicine_charges | decimal(10,2)                               | NO   |     | NULL    |                |
+| doctor_fees      | decimal(10,2)                               | NO   |     | NULL    |                |
+| total_amount     | decimal(10,2)                               | NO   |     | NULL    |                |
+| room_type        | enum('Single','Double','ICU','Deluxe','NA') | NO   |     | NULL    |                |
++------------------+---------------------------------------------+------+-----+---------+----------------+
+11 rows in set (0.00 sec)
+
+mysql> DESC discharged_patients;
++----------------------+--------------+------+-----+---------+----------------+
+| Field                | Type         | Null | Key | Default | Extra          |
++----------------------+--------------+------+-----+---------+----------------+
+| patient_id           | int          | YES  | MUL | NULL    |                |
+| patient_name         | varchar(100) | NO   |     | NULL    |                |
+| room_number          | varchar(50)  | YES  |     | NULL    |                |
+| room_type            | varchar(50)  | YES  |     | NULL    |                |
+| discharge_date       | date         | NO   |     | NULL    |                |
+| discharge_time       | time         | NO   |     | NULL    |                |
+| discharge_reason     | text         | YES  |     | NULL    |                |
+| is_icu               | tinyint(1)   | YES  |     | 0       |                |
+| emergency_patient_id | int          | YES  | UNI | NULL    |                |
+| discharge_id         | int          | NO   | PRI | NULL    | auto_increment |
++----------------------+--------------+------+-----+---------+----------------+
+10 rows in set (0.00 sec)
+
+mysql> DESC doctor;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id         | int          | NO   | PRI | NULL    | auto_increment |
+| staff_id   | int          | NO   | MUL | NULL    |                |
+| department | varchar(255) | NO   |     | NULL    |                |
+| role       | varchar(255) | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> DESC emergency_patients;
++----------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+| Field          | Type                                            | Null | Key | Default           | Extra             |
++----------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+| id             | int                                             | NO   | PRI | NULL              | auto_increment    |
+| name           | varchar(100)                                    | NO   |     | NULL              |                   |
+| contact_no     | varchar(15)                                     | NO   |     | NULL              |                   |
+| address        | text                                            | NO   |     | NULL              |                   |
+| blood_type     | enum('A+','A-','B+','B-','O+','O-','AB+','AB-') | NO   |     | NULL              |                   |
+| room_id        | int                                             | YES  | MUL | NULL              |                   |
+| doctor_id      | int                                             | YES  | MUL | NULL              |                   |
+| admission_date | timestamp                                       | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++----------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+8 rows in set (0.00 sec)
+
+mysql> DESC inventory;
++-------------+--------------+------+-----+-------------------+-------------------+
+| Field       | Type         | Null | Key | Default           | Extra             |
++-------------+--------------+------+-----+-------------------+-------------------+
+| id          | int          | NO   | PRI | NULL              | auto_increment    |
+| item_name   | varchar(100) | NO   |     | NULL              |                   |
+| quantity    | int          | NO   |     | NULL              |                   |
+| expiry_date | date         | NO   |     | NULL              |                   |
+| created_at  | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++-------------+--------------+------+-----+-------------------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> DESC patients;
++---------------------+---------------+------+-----+-------------------+-------------------+
+| Field               | Type          | Null | Key | Default           | Extra             |
++---------------------+---------------+------+-----+-------------------+-------------------+
+| id                  | int           | NO   | PRI | NULL              | auto_increment    |
+| name                | varchar(100)  | NO   |     | NULL              |                   |
+| age                 | int           | NO   |     | NULL              |                   |
+| gender              | enum('M','F') | NO   |     | NULL              |                   |
+| address             | text          | NO   |     | NULL              |                   |
+| contact_no          | varchar(15)   | NO   |     | NULL              |                   |
+| dob                 | date          | NO   |     | NULL              |                   |
+| consultant_name     | varchar(100)  | NO   |     | NULL              |                   |
+| date_of_consultancy | date          | NO   |     | NULL              |                   |
+| department          | varchar(100)  | NO   |     | NULL              |                   |
+| diseases            | varchar(255)  | NO   |     | NULL              |                   |
+| fees                | decimal(10,2) | NO   |     | NULL              |                   |
+| created_at          | timestamp     | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| medicine            | varchar(255)  | YES  |     | NULL              |                   |
+| quantity            | int           | YES  |     | 0                 |                   |
++---------------------+---------------+------+-----+-------------------+-------------------+
+15 rows in set (0.00 sec)
+
+mysql> DESC rooms;
++--------------+---------------------------------------------+------+-----+-------------------+-------------------+
+| Field        | Type                                        | Null | Key | Default           | Extra             |
++--------------+---------------------------------------------+------+-----+-------------------+-------------------+
+| id           | int                                         | NO   | PRI | NULL              | auto_increment    |
+| room_number  | varchar(50)                                 | NO   | UNI | NULL              |                   |
+| room_type    | enum('Single','Double','ICU','Deluxe','NA') | NO   |     | NULL              |                   |
+| availability | enum('Booked','Not Booked')                 | YES  |     | Not Booked        |                   |
+| patient_id   | int                                         | YES  | MUL | NULL              |                   |
+| created_at   | timestamp                                   | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
+| is_icu       | tinyint(1)                                  | YES  |     | 0                 |                   |
++--------------+---------------------------------------------+------+-----+-------------------+-------------------+
+7 rows in set (0.00 sec)
+
+mysql> DESC staff;
++------------+-----------------------------------------------+------+-----+-------------------+-------------------+
+| Field      | Type                                          | Null | Key | Default           | Extra             |
++------------+-----------------------------------------------+------+-----+-------------------+-------------------+
+| id         | int                                           | NO   | PRI | NULL              | auto_increment    |
+| staff_name | varchar(100)                                  | NO   |     | NULL              |                   |
+| role       | enum('Doctor','Nurse','Receptionist','Admin') | NO   |     | NULL              |                   |
+| shift      | enum('Morning','Afternoon','Night')           | NO   |     | NULL              |                   |
+| created_at | timestamp                                     | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++------------+-----------------------------------------------+------+-----+-------------------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> DESC user_logs;
++-------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+| Field       | Type                                            | Null | Key | Default           | Extra             |
++-------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+| id          | int                                             | NO   | PRI | NULL              | auto_increment    |
+| username    | varchar(50)                                     | NO   |     | NULL              |                   |
+| role        | enum('Admin','Doctor','Receptionist','Patient') | NO   |     | NULL              |                   |
+| action      | enum('login','logout')                          | NO   |     | NULL              |                   |
+| action_time | timestamp                                       | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++-------------+-------------------------------------------------+------+-----+-------------------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> DESC users;
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| id            | int          | NO   | PRI | NULL    | auto_increment |
+| username      | varchar(50)  | NO   | UNI | NULL    |                |
+| password_hash | varchar(128) | NO   |     | NULL    |                |
+| full_name     | varchar(100) | NO   |     | NULL    |                |
+| user_role     | varchar(20)  | NO   |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+
+
+#------------QuerytoMakeTable---------------------------------------------
+
+
+CREATE DATABASE IF NOT EXISTS hospitalmanagement;
+USE hospitalmanagement;
+
+-- Table: ambulance_service
+CREATE TABLE ambulance_service (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_name VARCHAR(100) NOT NULL,
+    address TEXT NOT NULL,
+    blood_type ENUM('A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-') NOT NULL,
+    ambulance_id INT NULL,
+    dispatch_time DATETIME NULL,
+    return_time DATETIME NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: ambulances
+CREATE TABLE ambulances (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ambulance_number VARCHAR(50) UNIQUE NOT NULL,
+    status ENUM('Available', 'On Service') DEFAULT 'Available',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: appointments
+CREATE TABLE appointments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_name VARCHAR(100) NOT NULL,
+    doctor_name VARCHAR(100) NOT NULL,
+    appointment_date DATE NOT NULL,
+    appointment_time TIME NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: attendance
+CREATE TABLE attendance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    role ENUM('Admin', 'Doctor', 'Receptionist', 'Patient') NOT NULL,
+    attendance_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: bill_details
+CREATE TABLE bill_details (
+    bill_no INT AUTO_INCREMENT PRIMARY KEY,
+    bill_date DATE NOT NULL,
+    patient_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    contact_no VARCHAR(15) NOT NULL,
+    room_charges DECIMAL(10,2) NOT NULL,
+    pathology_fees DECIMAL(10,2) NOT NULL,
+    medicine_charges DECIMAL(10,2) NOT NULL,
+    doctor_fees DECIMAL(10,2) NOT NULL,
+    total_amount DECIMAL(10,2) NOT NULL,
+    room_type ENUM('Single', 'Double', 'ICU', 'Deluxe', 'NA') NOT NULL
+);
+
+-- Table: discharged_patients
+CREATE TABLE discharged_patients (
+    discharge_id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT NULL,
+    patient_name VARCHAR(100) NOT NULL,
+    room_number VARCHAR(50) NULL,
+    room_type VARCHAR(50) NULL,
+    discharge_date DATE NOT NULL,
+    discharge_time TIME NOT NULL,
+    discharge_reason TEXT NULL,
+    is_icu TINYINT(1) DEFAULT 0,
+    emergency_patient_id INT UNIQUE NULL
+);
+
+-- Table: doctor
+CREATE TABLE doctor (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    staff_id INT NOT NULL,
+    department VARCHAR(255) NOT NULL,
+    role VARCHAR(255) NOT NULL
+);
+
+-- Table: emergency_patients
+CREATE TABLE emergency_patients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    contact_no VARCHAR(15) NOT NULL,
+    address TEXT NOT NULL,
+    blood_type ENUM('A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-') NOT NULL,
+    room_id INT NULL,
+    doctor_id INT NULL,
+    admission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: inventory
+CREATE TABLE inventory (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_name VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL,
+    expiry_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: patients
+CREATE TABLE patients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    age INT NOT NULL,
+    gender ENUM('M', 'F') NOT NULL,
+    address TEXT NOT NULL,
+    contact_no VARCHAR(15) NOT NULL,
+    dob DATE NOT NULL,
+    consultant_name VARCHAR(100) NOT NULL,
+    date_of_consultancy DATE NOT NULL,
+    department VARCHAR(100) NOT NULL,
+    diseases VARCHAR(255) NOT NULL,
+    fees DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    medicine VARCHAR(255) NULL,
+    quantity INT DEFAULT 0
+);
+
+-- Table: rooms
+CREATE TABLE rooms (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    room_number VARCHAR(50) UNIQUE NOT NULL,
+    room_type ENUM('Single', 'Double', 'ICU', 'Deluxe', 'NA') NOT NULL,
+    availability ENUM('Booked', 'Not Booked') DEFAULT 'Not Booked',
+    patient_id INT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_icu TINYINT(1) DEFAULT 0
+);
+
+-- Table: staff
+CREATE TABLE staff (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    staff_name VARCHAR(100) NOT NULL,
+    role ENUM('Doctor', 'Nurse', 'Receptionist', 'Admin') NOT NULL,
+    shift ENUM('Morning', 'Afternoon', 'Night') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: user_logs
+CREATE TABLE user_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    role ENUM('Admin', 'Doctor', 'Receptionist', 'Patient') NOT NULL,
+    action ENUM('login', 'logout') NOT NULL,
+    action_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: users
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password_hash VARCHAR(128) NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    user_role VARCHAR(20) NOT NULL
+);
