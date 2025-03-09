@@ -174,7 +174,7 @@ def startup_animation():
         "🌟 Welcome To 🌟",
         "🏥 The Hospital Management System 🏥",
         "🚀 Project By 🚀",
-        "👨‍💻 YKG & TEAM ‍💻"
+        "👨‍💻 YUVRAJ K GOND ‍💻"
     ]
 
     container = st.empty()
