@@ -545,7 +545,7 @@ def mark_attendance(username, role):
         logging.error(f"Error marking attendance: {er}")
 
 def attendance_dashboard():
-    st.subheader("📊 Attendance Dashboard")
+    st.markdown('<div class="header-lightblue"><h3>📊 Attendance Dashboard</h3></div>', unsafe_allow_html=True)
 
     # Use tabs instead of radio buttons
     tab1, tab2 = st.tabs(["Last 7 Days", "Monthly Summary"])
@@ -664,7 +664,7 @@ def view_doctors():
     """
     View Doctors: Accessible to Admin, Doctor, Receptionist, Nurse, and Patient (view-only).
     """
-    st.subheader("👨‍⚕️ Doctor Records")
+    st.markdown('<div class="header-lightblue"><h3> 👨‍⚕️View Doctor</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse", "Patient"])
 
     # Fetch doctor data with staff names, roles, and shifts
@@ -697,7 +697,7 @@ def add_doctor():
     """
     Add Doctor: Accessible to Admin, Doctor, Receptionist, and Nurse.
     """
-    st.subheader("👨‍⚕️ Add Doctor")
+    st.markdown('<div class="header-lightblue"><h3> 👨‍⚕️Add Doctor</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])  # Added "Nurse" to allowed roles
 
     # Fetch staff names, IDs, and roles for doctors
@@ -862,7 +862,7 @@ def add_patient():
 
 
 def view_patients():
-    st.subheader("📋 Patient Records with Room and Medicine Details")
+    st.markdown('<div class="header-lightblue"><h3>📋 Patient Records with Room and Medicine Details</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
 
     # Fetch patient data with room and medicine details
@@ -954,7 +954,8 @@ def view_patients():
 
 def discharge_patient():
     """Discharge patient, free up room, and record discharge details with reason."""
-    st.subheader("\U0001F3E2 Discharge Patient from Room")
+    st.markdown('<div class="header-lightblue"><h3>\U0001F3E2 Discharge Patient from Room</h3></div>',
+                unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
 
     # Fetch the list of patients currently allocated to rooms (both general and ICU)
@@ -1065,7 +1066,8 @@ def discharge_patient():
         st.warning("Please select a patient to discharge.")
 
 def view_discharged_patients():
-    st.subheader("\U0001F4DC Discharged Patients Records")
+    st.markdown('<div class="header-lightblue"><h3>\U0001F4DC Discharged Patients Records</h3></div>',
+                unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
 
     # Fetch discharged patient records
@@ -1246,7 +1248,7 @@ def add_emergency_patient():
             st.success("Emergency patient added successfully!")
 
 def view_emergency_patients():
-    st.subheader("🚨 Emergency Patients")
+    st.markdown('<div class="header-lightblue"><h3>🚨 Emergency Patients Records</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
 
     # Get ICU room status
@@ -1341,7 +1343,7 @@ def discharge_emergency_patient_ui():
         st.info("No emergency patients with allocated ICU rooms found.")
 
 def emergency_summary_metrics():
-    st.subheader("📊 Emergency Summary Metrics")
+    st.markdown('<div class="header-lightblue"><h3>📊 Emergency Summary Metrics</h3></div>', unsafe_allow_html=True)
 
     # Total Emergency Patients
     total_patients = fetch_data("SELECT COUNT(*) FROM emergency_patients", "emergency_patients", columns=["count"])
@@ -1449,7 +1451,6 @@ def icu_room_utilization():
 
 
 def emergency_dashboard():
-    st.subheader("🚨 Emergency Unit Dashboard")
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
 
     # Display summary metrics
@@ -1469,7 +1470,7 @@ def emergency_dashboard():
 def room_info_section():
     """Manage Room Information Section."""
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
-    st.subheader("\U0001F3E2 Room Info")
+    st.markdown('<div class="header-lightblue"><h3>\U0001F3E2 Room Info</h3></div>', unsafe_allow_html=True)
     room_tabs = st.tabs(["Allocate Room", "View Rooms", "Discharge Patient", "View Discharged Patients"])
 
     with room_tabs[0]:
@@ -1485,7 +1486,7 @@ def room_info_section():
         view_discharged_patients()
 
 def view_rooms():
-    st.subheader("\U0001F3E2 Room Availability")
+    st.markdown('<div class="header-lightblue"><h3>\U0001F3E2 Room Availability</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse", "Patient"])
     # Fetch total number of general rooms
     total_gen = fetch_data(
@@ -1589,7 +1590,8 @@ def add_bill():
         logging.error(f"Error in billing section: {e}")
 
 def view_bills():
-    st.subheader("\U0001F4B8 Billing Information")
+    st.markdown('<div class="header-lightblue"><h3>\U0001F4B8 Billing Information</h3></div>', unsafe_allow_html=True)
+
 
     # Fetch billing data along with patient details
     query = """
@@ -1634,7 +1636,7 @@ def view_bills():
 # ------------------ Dashboard Section ------------------
 def show_dashboard():
     # Key Metrics Section
-    st.markdown("### 📊 Hospital Dashboard")
+    st.markdown('<div class="header-lightblue"><h3>📊 Hospital Dashboard</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse", "Patient"])
     col1, col2, col3 = st.columns(3)
 
@@ -1719,15 +1721,12 @@ def show_dashboard():
         general_room_details()
 
     # Discharge Patients Graph
-    st.markdown("### 📉 Discharge Patients Over Time")
     discharge_patients_graph()
 
     # Add Patients Graph
-    st.markdown("### 📈 Patients Added Over Time")
     add_patients_graph()
 
     # Disease Word Cloud
-    st.markdown("### 🦠 Disease Frequency")
     disease_word_cloud()
 
     # Emergency Response Time
@@ -1735,15 +1734,12 @@ def show_dashboard():
     emergency_response_time()
 
     # Patient Gender Ratio
-    st.markdown("### ⚕️ Patient Gender Ratio")
     patient_gender_ratio()
 
     # Patient Department Distribution
-    st.markdown("### 🏥 Patients per Department")
     patient_department_distribution()
 
     # Room Allocation Chart
-    st.markdown("### 🏨 Room Allocation by Type")
     room_allocation_chart()
 
 
@@ -2141,6 +2137,7 @@ def patient_age_distribution():
 
 def live_inventory_gauge():
     """Enhanced inventory gauge with dynamic thresholds."""
+    st.markdown("### 📦 Inventory Status")
     low_stock_percent_data = fetch_data(
         "SELECT COUNT(*) * 100.0 / (SELECT COUNT(*) FROM inventory) as percent FROM inventory WHERE quantity < 10",
         "inventory"
@@ -2240,7 +2237,7 @@ def emergency_response_time():
 
 # ------------------ Advanced Search ------------------
 def advanced_search():
-    st.subheader("🔍 Advanced Search")
+    st.markdown('<div class="header-lightblue"><h3>🔍 Advanced Search</h3></div>', unsafe_allow_html=True)
 
 
     # Define search options based on user role
@@ -2561,7 +2558,7 @@ def view_appointments():
     View Appointments: Accessible to Admin, Doctor, Receptionist, and Nurse.
     """
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse","Patient"])
-    st.subheader("📅 Appointment Records")
+    st.markdown('<div class="header-lightblue"><h3>📅 Appointment Records</h3></div>', unsafe_allow_html=True)
 
     # Fetch appointment data with department and shift from the doctor and staff tables
     query = """
@@ -2600,7 +2597,7 @@ def view_appointments():
 # ------------------ Inventory Management Section ------------------
 def manage_inventory():
     check_user_role(["Admin", "Doctor", "Nurse"])
-    st.subheader("💊 Inventory Management")
+    st.markdown('<div class="header-lightblue"><h3>💊 Inventory Management</h3></div>', unsafe_allow_html=True)
     item_name = st.text_input("Item Name")
     quantity = st.number_input("Quantity", min_value=0)
     expiry_date = st.date_input("Expiry Date")
@@ -2611,7 +2608,7 @@ def manage_inventory():
 
 
 def view_inventory():
-    st.subheader("💊 Inventory Records")
+    st.markdown('<div class="header-lightblue"><h3>💊 Inventory Records</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Nurse","Receptionist"])
 
     # Define all 5 columns to match the inventory table structure
@@ -2639,7 +2636,7 @@ def view_inventory():
 # ------------------ Staff Management Section ------------------
 def manage_staff():
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
-    st.subheader("👨‍⚕️ Staff Management")
+    st.markdown('<div class="header-lightblue"><h3>🧑‍⚕️ Staff Management</h3></div>', unsafe_allow_html=True)
     staff_name = st.text_input("Staff Name")
     role = st.selectbox("Role", ["Doctor", "Nurse", "Receptionist", "Admin"])
     shift = st.selectbox("Shift", ["Morning", "Afternoon", "Night"])
@@ -2650,7 +2647,7 @@ def manage_staff():
 
 
 def view_staff():
-    st.subheader("👨‍⚕️ Staff Records")
+    st.markdown('<div class="header-lightblue"><h3>🧑‍⚕️ View Staff Records</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
     # Define all 5 columns to match the query result
     columns = ["Staff ID", "Staff Name", "Role", "Shift", "Created At"]
@@ -2670,7 +2667,7 @@ def view_patient_history():
     """
     Enhanced Patient History Functionality with discharge details, room allocation details, emergency history, and medicine/quantity.
     """
-    st.subheader("📜 Patient History")
+    st.markdown('<div class="header-lightblue"><h3>📜 Patient History</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse", "Patient"])
 
     # Search Box for Filtering Patients
@@ -2783,7 +2780,6 @@ def view_patient_history():
 
 # ------------------ Ambulance Service Section ------------------
 def ambulance_service_section():
-    st.subheader("🚑 Ambulance Service")
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse", "Patient"])
 
     # Initialize 5 ambulances (run once)
@@ -2952,7 +2948,6 @@ def ambulance_service_section():
         else:
             st.dataframe(records)
 
-
 # ----------------Reports ------------------
 def generate_pdf_report(data, title, filename):
     """Generate a PDF report from the given data with improved formatting."""
@@ -3018,7 +3013,7 @@ def download_report(data, title, filename):
 def generate_reports():
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
     """Generate reports with improved formatting and error handling."""
-    st.subheader("📄 Generate Reports")
+    st.markdown('<div class="header-lightblue"><h3>📄 Generate Reports</h3></div>', unsafe_allow_html=True)
     report_type = st.selectbox("Select Report Type", [
         "Patient History", "Billing", "Staff", "Inventory", "Appointments",
         "Emergency Patients", "Rooms", "Doctors"
@@ -3065,7 +3060,7 @@ def generate_reports():
 def export_data():
     check_user_role(["Admin","Doctor", "Receptionist", "Nurse"])
     try:
-        st.subheader("📤 Export Data")
+        st.markdown('<div class="header-lightblue"><h3>📤 Export Data</h3></div>', unsafe_allow_html=True)
 
         # Dropdown to select data type
         data_type = st.selectbox("Select Data to Export", [
