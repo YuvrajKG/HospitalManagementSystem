@@ -5,14 +5,15 @@ import tempfile
 import time
 from datetime import datetime
 from pathlib import Path
+import plotly.express as px
 import mysql.connector as sq
 import numpy as np
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from dotenv import load_dotenv
 from fpdf import FPDF
+
 
 # Load environment variables
 load_dotenv()
@@ -544,7 +545,7 @@ def mark_attendance(username, role):
         logging.error(f"Error marking attendance: {er}")
 
 def attendance_dashboard():
-    st.subheader("📊 Attendance Dashboard")
+    st.markdown('<div class="header-lightblue"><h3>📊 Attendance Dashboard</h3></div>', unsafe_allow_html=True)
 
     # Use tabs instead of radio buttons
     tab1, tab2 = st.tabs(["Last 7 Days", "Monthly Summary"])
@@ -663,7 +664,7 @@ def view_doctors():
     """
     View Doctors: Accessible to Admin, Doctor, Receptionist, Nurse, and Patient (view-only).
     """
-    st.subheader("👨‍⚕️ Doctor Records")
+    st.markdown('<div class="header-lightblue"><h3> 👨‍⚕️View Doctor</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse", "Patient"])
 
     # Fetch doctor data with staff names, roles, and shifts
@@ -696,7 +697,7 @@ def add_doctor():
     """
     Add Doctor: Accessible to Admin, Doctor, Receptionist, and Nurse.
     """
-    st.subheader("👨‍⚕️ Add Doctor")
+    st.markdown('<div class="header-lightblue"><h3> 👨‍⚕️Add Doctor</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])  # Added "Nurse" to allowed roles
 
     # Fetch staff names, IDs, and roles for doctors
@@ -861,7 +862,7 @@ def add_patient():
 
 
 def view_patients():
-    st.subheader("📋 Patient Records with Room and Medicine Details")
+    st.markdown('<div class="header-lightblue"><h3>📋 Patient Records with Room and Medicine Details</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
 
     # Fetch patient data with room and medicine details
@@ -953,7 +954,8 @@ def view_patients():
 
 def discharge_patient():
     """Discharge patient, free up room, and record discharge details with reason."""
-    st.subheader("\U0001F3E2 Discharge Patient from Room")
+    st.markdown('<div class="header-lightblue"><h3>\U0001F3E2 Discharge Patient from Room</h3></div>',
+                unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
 
     # Fetch the list of patients currently allocated to rooms (both general and ICU)
@@ -1064,7 +1066,8 @@ def discharge_patient():
         st.warning("Please select a patient to discharge.")
 
 def view_discharged_patients():
-    st.subheader("\U0001F4DC Discharged Patients Records")
+    st.markdown('<div class="header-lightblue"><h3>\U0001F4DC Discharged Patients Records</h3></div>',
+                unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
 
     # Fetch discharged patient records
@@ -1245,7 +1248,7 @@ def add_emergency_patient():
             st.success("Emergency patient added successfully!")
 
 def view_emergency_patients():
-    st.subheader("🚨 Emergency Patients")
+    st.markdown('<div class="header-lightblue"><h3>🚨 Emergency Patients Records</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
 
     # Get ICU room status
@@ -1340,7 +1343,7 @@ def discharge_emergency_patient_ui():
         st.info("No emergency patients with allocated ICU rooms found.")
 
 def emergency_summary_metrics():
-    st.subheader("📊 Emergency Summary Metrics")
+    st.markdown('<div class="header-lightblue"><h3>📊 Emergency Summary Metrics</h3></div>', unsafe_allow_html=True)
 
     # Total Emergency Patients
     total_patients = fetch_data("SELECT COUNT(*) FROM emergency_patients", "emergency_patients", columns=["count"])
@@ -1448,7 +1451,6 @@ def icu_room_utilization():
 
 
 def emergency_dashboard():
-    st.subheader("🚨 Emergency Unit Dashboard")
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
 
     # Display summary metrics
@@ -1468,7 +1470,7 @@ def emergency_dashboard():
 def room_info_section():
     """Manage Room Information Section."""
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
-    st.subheader("\U0001F3E2 Room Info")
+    st.markdown('<div class="header-lightblue"><h3>\U0001F3E2 Room Info</h3></div>', unsafe_allow_html=True)
     room_tabs = st.tabs(["Allocate Room", "View Rooms", "Discharge Patient", "View Discharged Patients"])
 
     with room_tabs[0]:
@@ -1484,7 +1486,7 @@ def room_info_section():
         view_discharged_patients()
 
 def view_rooms():
-    st.subheader("\U0001F3E2 Room Availability")
+    st.markdown('<div class="header-lightblue"><h3>\U0001F3E2 Room Availability</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse", "Patient"])
     # Fetch total number of general rooms
     total_gen = fetch_data(
@@ -1588,7 +1590,8 @@ def add_bill():
         logging.error(f"Error in billing section: {e}")
 
 def view_bills():
-    st.subheader("\U0001F4B8 Billing Information")
+    st.markdown('<div class="header-lightblue"><h3>\U0001F4B8 Billing Information</h3></div>', unsafe_allow_html=True)
+
 
     # Fetch billing data along with patient details
     query = """
@@ -1633,7 +1636,7 @@ def view_bills():
 # ------------------ Dashboard Section ------------------
 def show_dashboard():
     # Key Metrics Section
-    st.markdown("### 📊Hospital Dashboard")
+    st.markdown('<div class="header-lightblue"><h3>📊 Hospital Dashboard</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse", "Patient"])
     col1, col2, col3 = st.columns(3)
 
@@ -1656,21 +1659,32 @@ def show_dashboard():
 
     # Alerts Section (Only Display When Necessary)
     st.markdown("### ⚠️ Alerts")
+
+    # Initialize a variable to track if any alert is triggered
+    alert_triggered = False
+
+    # ICU Occupancy Alert
     total_icu_rooms = fetch_data("SELECT COUNT(*) FROM rooms WHERE is_icu = TRUE", "rooms").iloc[0, 0]
-    occupied_icu_rooms = \
-    fetch_data("SELECT COUNT(*) FROM rooms WHERE is_icu = TRUE AND availability = 'Booked'", "rooms").iloc[0, 0]
+    occupied_icu_rooms = fetch_data("SELECT COUNT(*) FROM rooms WHERE is_icu = TRUE AND availability = 'Booked'", "rooms").iloc[0, 0]
     icu_occupancy_rate = (occupied_icu_rooms / total_icu_rooms) * 100 if total_icu_rooms else 0
 
     # Display ICU Occupancy Alert Only if Occupancy > 80%
     if icu_occupancy_rate > 80:
         st.warning(f"⚠️ ICU Room Occupancy is at {icu_occupancy_rate:.2f}%. Consider expanding capacity.")
+        alert_triggered = True
 
-    # Display Low Stock Alert Only if Low Stock Items Exist
+    # Low Stock Alert
     low_stock_items = fetch_data("SELECT COUNT(*) FROM inventory WHERE quantity < 5", "inventory").iloc[0, 0]
     if low_stock_items > 0:
         st.warning(f"⚠️ {low_stock_items} critical inventory items have low stock levels!")
+        alert_triggered = True
+
+    # Display "All Good" if no alerts are triggered
+    if not alert_triggered:
+        st.success("✅ All Good! No critical or alerting situations detected.")
+
     # 🔹 Enhanced Visualizations Section
-    st.markdown("### 📊 Hospital Summarized Visulization")
+    st.markdown("### 📊 Hospital Summarized Visualization")
 
     # Patient Demographics Card
     patient_demographics_card()
@@ -1707,15 +1721,12 @@ def show_dashboard():
         general_room_details()
 
     # Discharge Patients Graph
-    st.markdown("### 📉 Discharge Patients Over Time")
     discharge_patients_graph()
 
     # Add Patients Graph
-    st.markdown("### 📈 Patients Added Over Time")
     add_patients_graph()
 
     # Disease Word Cloud
-    st.markdown("### 🦠 Disease Frequency")
     disease_word_cloud()
 
     # Emergency Response Time
@@ -1723,16 +1734,14 @@ def show_dashboard():
     emergency_response_time()
 
     # Patient Gender Ratio
-    st.markdown("### ⚕️ Patient Gender Ratio")
     patient_gender_ratio()
 
     # Patient Department Distribution
-    st.markdown("### 🏥 Patients per Department")
     patient_department_distribution()
 
     # Room Allocation Chart
-    st.markdown("### 🏨 Room Allocation by Type")
     room_allocation_chart()
+
 
 
 def patient_demographics_card():
@@ -1830,7 +1839,7 @@ def general_room_details():
 
 
 def revenue_trend_sparkline():
-    """Enhanced revenue trend visualization with annotations and better formatting."""
+    """Enhanced revenue trend visualization with rainbow colors, annotations, and better formatting."""
     revenue_data = fetch_data(
         "SELECT DATE_FORMAT(bill_date, '%Y-%m') AS month, SUM(total_amount) AS total_amount FROM bill_details GROUP BY month",
         "bill_details",
@@ -1842,15 +1851,26 @@ def revenue_trend_sparkline():
         st.warning("No revenue data available to display.")
         return
 
-    # Create the line chart
+    # Define a custom rainbow color palette
+    rainbow_colors = [
+        "#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#9400D3"
+    ]
+
+    # Create the line chart with rainbow colors
     fig = px.line(revenue_data, x='month', y='total_amount',
                   title="💰 Monthly Revenue Trend",
                   line_shape="spline",
-                  color_discrete_sequence=["#BA68C8"],
+                  color_discrete_sequence=rainbow_colors,  # Use rainbow colors
                   labels={"month": "Month", "total_amount": "Revenue (₹)"})
-    fig.update_layout(plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
-                      xaxis_title="Month", yaxis_title="Revenue (₹)",
-                      hovermode="x unified")
+
+    # Update layout for better readability
+    fig.update_layout(
+        plot_bgcolor="rgba(0,0,0,0)",  # Transparent plot background
+        paper_bgcolor="rgba(0,0,0,0)",  # Transparent outer background
+        xaxis_title="Month",
+        yaxis_title="Revenue (₹)",
+        hovermode="x unified"  # Unified hover information
+    )
 
     # Add annotation for the last data point
     last_month = revenue_data['month'].iloc[-1]
@@ -1865,7 +1885,6 @@ def revenue_trend_sparkline():
 
     # Display the chart
     st.plotly_chart(fig)
-
 
 def doctor_patient_ratio_donut():
     """Enhanced doctor-patient ratio visualization with dynamic colors."""
@@ -1891,7 +1910,8 @@ def patient_department_distribution():
     if not department_data.empty:
         fig = px.bar(department_data, x="Department", y="Count",
                      title="🏥 Patients per Department",
-                     color="Count", color_continuous_scale="Blues",
+                     color="Department",  # Use "Department" for multi-color bars
+                     color_discrete_sequence=px.colors.qualitative.Plotly,  # Use a qualitative color scale
                      labels={"Count": "Number of Patients", "Department": "Department"})
         fig.update_layout(xaxis_tickangle=-45, hovermode="x unified")
         st.plotly_chart(fig)
@@ -1906,15 +1926,35 @@ def room_allocation_chart():
         "rooms",
         columns=["Room Type", "Count"]
     )
+
     if not room_data.empty:
-        fig = px.pie(room_data, values="Count", names="Room Type",
-                     title="🏨 Room Allocation by Type",
-                     hole=0.4, color_discrete_sequence=px.colors.qualitative.Pastel,
-                     labels={"Count": "Number of Rooms", "Room Type": "Room Type"})
-        fig.update_traces(textposition='inside', textinfo='percent+label')
-        st.plotly_chart(fig)
+        # Using the exact rainbow colors in the correct order
+        rainbow_colors = ["#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#8B00FF"]
+
+        fig = go.Figure(
+            data=[
+                go.Pie(
+                    labels=room_data["Room Type"],
+                    values=room_data["Count"],
+                    hole=0.3,  # Donut effect
+                    marker=dict(colors=rainbow_colors[:len(room_data)]),  # Assigning colors dynamically
+                    textinfo="percent+label",
+                    pull=[0.05] * len(room_data)  # Slightly pulling out each slice for emphasis
+                )
+            ]
+        )
+
+        fig.update_layout(
+            title="🏨 Room Allocation by Type",
+            font=dict(family="Arial, sans-serif", size=14, color="black"),
+            showlegend=True,
+            legend=dict(title="Room Categories", orientation="h", yanchor="bottom", y=-0.3, xanchor="center", x=0.5),
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
     else:
-        st.warning("No room allocation data available.")
+        st.warning("⚠ No room allocation data available.")
 
 
 def patient_gender_ratio():
@@ -2015,7 +2055,7 @@ def add_patients_graph():
 
 
 def staff_shift_sunburst():
-    """Enhanced staff shift visualization with dynamic colors."""
+    """Enhanced staff shift visualization with vibrant rainbow colors for roles and shifts."""
     try:
         # Fetch staff shift data
         staff_data = fetch_data(
@@ -2029,12 +2069,34 @@ def staff_shift_sunburst():
             st.warning("No staff shift data available to display.")
             return
 
-        # Create the sunburst chart
+        # Define an extended rainbow color palette
+        rainbow_colors = [
+            "#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#8B00FF",
+            "#FF1493", "#00FFFF", "#7FFF00", "#8A2BE2", "#FF4500", "#DA70D6", "#00CED1",
+            "#FFD700", "#8B008B", "#20B2AA", "#FF69B4", "#7CFC00", "#9932CC"
+        ]
+
+        # Create a color mapping for roles and shifts
+        roles = staff_data['Role'].unique()
+        shifts = staff_data['Shift'].unique()
+        color_mapping = {}
+
+        # Assign unique rainbow colors to each role and shift combination
+        color_index = 0
+        for role in roles:
+            for shift in shifts:
+                color_mapping[f"{role}_{shift}"] = rainbow_colors[color_index % len(rainbow_colors)]
+                color_index += 1
+
+        # Map colors to the data
+        staff_data['color'] = staff_data.apply(lambda row: color_mapping[f"{row['Role']}_{row['Shift']}"], axis=1)
+
+        # Create the sunburst chart with rainbow colors
         fig = px.sunburst(
             staff_data,
             path=['Role', 'Shift'],
-            color='Role',
-            color_discrete_sequence=px.colors.qualitative.Pastel,
+            color='color',  # Use custom colors
+            color_discrete_map=color_mapping,  # Map colors to roles and shifts
             title="🌌 Staff Shift Distribution",
             labels={"Count": "Number of Staff"}
         )
@@ -2044,9 +2106,8 @@ def staff_shift_sunburst():
         st.error(f"Error generating staff shift sunburst chart: {e}")
         logging.error(f"Error in staff_shift_sunburst: {e}")
 
-
 def patient_age_distribution():
-    """Enhanced age distribution visualization with dynamic age groups."""
+    """Enhanced age distribution visualization with dynamic age groups and multi-colors."""
     age_data = fetch_data(
         """
         SELECT 
@@ -2066,16 +2127,17 @@ def patient_age_distribution():
     if not age_data.empty:
         fig = px.bar(age_data, x="Age Group", y="Count",
                      title="📊 Patient Age Distribution",
-                     color="Count", color_continuous_scale="Sunset",
+                     color="Age Group",  # Use "Age Group" for multi-color bars
+                     color_discrete_sequence=px.colors.qualitative.Vivid,  # Use a vibrant color palette
                      labels={"Count": "Number of Patients", "Age Group": "Age Group"})
         fig.update_layout(coloraxis_showscale=False, hovermode="x unified")
         st.plotly_chart(fig)
     else:
         st.warning("No patient age data available.")
 
-
 def live_inventory_gauge():
     """Enhanced inventory gauge with dynamic thresholds."""
+    st.markdown("### 📦 Inventory Status")
     low_stock_percent_data = fetch_data(
         "SELECT COUNT(*) * 100.0 / (SELECT COUNT(*) FROM inventory) as percent FROM inventory WHERE quantity < 10",
         "inventory"
@@ -2098,36 +2160,57 @@ def live_inventory_gauge():
 
 
 def appointment_calendar():
+    """Visualize daily appointments over months using a multi-colored line graph."""
     appointment_data = fetch_data(
         "SELECT DAY(appointment_date) as day, MONTH(appointment_date) as month, COUNT(*) as count FROM appointments GROUP BY day, month",
         "appointments",
         columns=["Day", "Month", "Count"]
     )
-    fig = px.density_heatmap(appointment_data, x='Day', y='Month', z='Count',
-                             title="📅 Appointment Calendar",
-                             color_continuous_scale="Plasma",
-                             labels={"Day": "Day of Month", "Month": "Month", "Count": "Number of Appointments"})
-    fig.update_layout(yaxis_nticks=12, hovermode="x unified")
-    st.plotly_chart(fig)
+
+    if not appointment_data.empty:
+        # Create a line graph with multi-colors for each month
+        fig = px.line(appointment_data, x='Day', y='Count', color='Month',
+                      title="📅 Daily Appointments Over Months",
+                      color_discrete_sequence=px.colors.qualitative.Vivid,  # Use a vibrant color palette
+                      labels={"Day": "Day of Month", "Count": "Number of Appointments", "Month": "Month"})
+
+        # Update layout for better readability
+        fig.update_layout(
+            xaxis_title="Day of Month",
+            yaxis_title="Number of Appointments",
+            hovermode="x unified",
+            legend_title="Month",
+            xaxis=dict(tickmode='linear', tick0=1, dtick=1),  # Show every day on the x-axis
+            yaxis=dict(tickmode='linear', tick0=0)  # Start y-axis from 0
+        )
+        st.plotly_chart(fig)
+    else:
+        st.warning("No appointment data available.")
 
 
 def disease_word_cloud():
+    """Visualize disease frequency with attractive multi-colors for different diseases."""
     disease_freq_data = fetch_data(
         "SELECT diseases, COUNT(*) as count FROM patients GROUP BY diseases",
         "patients",
         columns=["Disease", "Count"]
     )
     if not disease_freq_data.empty:
+        # Create a bar chart with multi-colors for each disease
         fig = px.bar(disease_freq_data, x="Disease", y="Count",
                      title="🦠 Disease Frequency",
                      labels={"Disease": "Disease Name", "Count": "Number of Cases"},
-                     color="Count",
-                     color_continuous_scale="Viridis")
-        fig.update_layout(xaxis_tickangle=-45, hovermode="x unified")
+                     color="Disease",  # Use "Disease" for multi-color bars
+                     color_discrete_sequence=px.colors.qualitative.Vivid,  # Use a vibrant color palette
+                     )
+        fig.update_layout(
+            xaxis_tickangle=-45,  # Rotate x-axis labels for better readability
+            hovermode="x unified",  # Show unified hover information
+            showlegend=False  # Hide legend since colors are self-explanatory
+        )
         st.plotly_chart(fig)
     else:
         st.warning("No disease data available to display.")
-
 
 def emergency_response_time():
     response_time_data = fetch_data(
@@ -2154,7 +2237,7 @@ def emergency_response_time():
 
 # ------------------ Advanced Search ------------------
 def advanced_search():
-    st.subheader("🔍 Advanced Search")
+    st.markdown('<div class="header-lightblue"><h3>🔍 Advanced Search</h3></div>', unsafe_allow_html=True)
 
 
     # Define search options based on user role
@@ -2475,7 +2558,7 @@ def view_appointments():
     View Appointments: Accessible to Admin, Doctor, Receptionist, and Nurse.
     """
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse","Patient"])
-    st.subheader("📅 Appointment Records")
+    st.markdown('<div class="header-lightblue"><h3>📅 Appointment Records</h3></div>', unsafe_allow_html=True)
 
     # Fetch appointment data with department and shift from the doctor and staff tables
     query = """
@@ -2514,7 +2597,7 @@ def view_appointments():
 # ------------------ Inventory Management Section ------------------
 def manage_inventory():
     check_user_role(["Admin", "Doctor", "Nurse"])
-    st.subheader("💊 Inventory Management")
+    st.markdown('<div class="header-lightblue"><h3>💊 Inventory Management</h3></div>', unsafe_allow_html=True)
     item_name = st.text_input("Item Name")
     quantity = st.number_input("Quantity", min_value=0)
     expiry_date = st.date_input("Expiry Date")
@@ -2525,7 +2608,7 @@ def manage_inventory():
 
 
 def view_inventory():
-    st.subheader("💊 Inventory Records")
+    st.markdown('<div class="header-lightblue"><h3>💊 Inventory Records</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Nurse","Receptionist"])
 
     # Define all 5 columns to match the inventory table structure
@@ -2553,7 +2636,7 @@ def view_inventory():
 # ------------------ Staff Management Section ------------------
 def manage_staff():
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
-    st.subheader("👨‍⚕️ Staff Management")
+    st.markdown('<div class="header-lightblue"><h3>🧑‍⚕️ Staff Management</h3></div>', unsafe_allow_html=True)
     staff_name = st.text_input("Staff Name")
     role = st.selectbox("Role", ["Doctor", "Nurse", "Receptionist", "Admin"])
     shift = st.selectbox("Shift", ["Morning", "Afternoon", "Night"])
@@ -2564,7 +2647,7 @@ def manage_staff():
 
 
 def view_staff():
-    st.subheader("👨‍⚕️ Staff Records")
+    st.markdown('<div class="header-lightblue"><h3>🧑‍⚕️ View Staff Records</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
     # Define all 5 columns to match the query result
     columns = ["Staff ID", "Staff Name", "Role", "Shift", "Created At"]
@@ -2584,7 +2667,7 @@ def view_patient_history():
     """
     Enhanced Patient History Functionality with discharge details, room allocation details, emergency history, and medicine/quantity.
     """
-    st.subheader("📜 Patient History")
+    st.markdown('<div class="header-lightblue"><h3>📜 Patient History</h3></div>', unsafe_allow_html=True)
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse", "Patient"])
 
     # Search Box for Filtering Patients
@@ -2697,7 +2780,6 @@ def view_patient_history():
 
 # ------------------ Ambulance Service Section ------------------
 def ambulance_service_section():
-    st.subheader("🚑 Ambulance Service")
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse", "Patient"])
 
     # Initialize 5 ambulances (run once)
@@ -2866,7 +2948,6 @@ def ambulance_service_section():
         else:
             st.dataframe(records)
 
-
 # ----------------Reports ------------------
 def generate_pdf_report(data, title, filename):
     """Generate a PDF report from the given data with improved formatting."""
@@ -2932,7 +3013,7 @@ def download_report(data, title, filename):
 def generate_reports():
     check_user_role(["Admin", "Doctor", "Receptionist", "Nurse"])
     """Generate reports with improved formatting and error handling."""
-    st.subheader("📄 Generate Reports")
+    st.markdown('<div class="header-lightblue"><h3>📄 Generate Reports</h3></div>', unsafe_allow_html=True)
     report_type = st.selectbox("Select Report Type", [
         "Patient History", "Billing", "Staff", "Inventory", "Appointments",
         "Emergency Patients", "Rooms", "Doctors"
@@ -2979,7 +3060,7 @@ def generate_reports():
 def export_data():
     check_user_role(["Admin","Doctor", "Receptionist", "Nurse"])
     try:
-        st.subheader("📤 Export Data")
+        st.markdown('<div class="header-lightblue"><h3>📤 Export Data</h3></div>', unsafe_allow_html=True)
 
         # Dropdown to select data type
         data_type = st.selectbox("Select Data to Export", [
